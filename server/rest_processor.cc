@@ -2,7 +2,7 @@
 // (C) Vince Coccia, 2015
 
 #include "rest_processor.hh"
-#include <boost/network/uri.hpp>
+#include "request_context.hh"
 #include <boost/thread/locks.hpp>
 #include <boost/format.hpp>
 #include <stdexcept>
@@ -51,10 +51,9 @@ namespace rest
         std::string payload{"{ error : \"Not found.\" }"};
         std::vector<async_server::response_header> headers{std_headers};
         
-        std::string destPath{std::string(destination(req))};
-        std::string resource{parse_destination(destPath)};
+        std::string resource{parse_destination(req.destination)};
         
-        std::cout << "Path: " << destPath << std::endl;
+        std::cout << "Path: " << req.destination << std::endl;
         
         std::cout << "Resource: " << resource << std::endl;
         
@@ -70,8 +69,9 @@ namespace rest
         }
         if (! sendError)
         {
+            RequestContext ctx(req.destination);
             boost::lock_guard<boost::mutex> lock(listMtx);
-            workList.push_back(std::bind(resFunc, std::cref(req), conn));
+            workList.push_back(std::bind(resFunc, std::cref(req), conn, ctx));
         }
         else
         {

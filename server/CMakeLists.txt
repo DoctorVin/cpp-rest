@@ -5,14 +5,18 @@ set(sync_source_files
     rest-server.cc)
 
 set(async_source_files
+    event_persister.cc
+    request_context.cc
+    memory_events.cc
+    event_resource.cc
     liveness_resource.cc
     rest_processor.cc
     async-rest.cc)
     
 #set (tests)
 
-add_executable(rest-server ${sync_source_files})
-target_link_libraries(rest-server ${CPPNETLIB_LIBRARIES} ${Boost_SYSTEM_LIBRARY})
+#add_executable(rest-server ${sync_source_files})
+#target_link_libraries(rest-server ${CPPNETLIB_LIBRARIES} ${Boost_SYSTEM_LIBRARY})
 
 add_executable(async-server ${async_source_files})
 target_link_libraries(async-server ${CPPNETLIB_LIBRARIES} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY})

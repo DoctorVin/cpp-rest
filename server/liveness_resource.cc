@@ -4,16 +4,15 @@
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/range.hpp>
-#include <vector>
 #include "liveness_resource.hh"
 
 namespace rest
 {
-    const std::string AsyncLivenessResource::destination("/liveness");
+    const std::string AsyncLivenessResource::resource_target("/liveness");
     const std::string AsyncLivenessResource::liveness_format("{ proof_of_life : %1% }");
     
     void 
-    AsyncLivenessResource::operator()(const async_server::request& req, async_server::connection_ptr conn)
+    AsyncLivenessResource::operator()(const async_server::request& req, async_server::connection_ptr conn, RequestContext)
     {
         std::vector<async_server::response_header> headers{std_headers};
         auto status = async_server::connection::not_supported;

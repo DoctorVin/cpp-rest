@@ -63,13 +63,13 @@ int main(void) try
     boost::shared_ptr<boost::thread_group> 
         p_threads(boost::make_shared<boost::thread_group>());
 
-    // setup asio::io_service
+    // setup asio::io_service -- NB: asio in Boost 1.57 doesn't seem to like std::shared_ptr
     boost::shared_ptr<boost::asio::io_service> 
         p_io_service(boost::make_shared<boost::asio::io_service>());
     boost::shared_ptr<boost::asio::io_service::work> 
         p_work(boost::make_shared<boost::asio::io_service::work>(boost::ref(*p_io_service)) );
 
-    // io_service threads
+    // io_service threads -- this was in the example, but I don't think it's needed
     /*{
         int n_threads = 5;
         while (0 < n_threads--) 
@@ -81,7 +81,7 @@ int main(void) try
   
     rest::WorkQueue queue;
     rest::AsyncLivenessResource liveness;
-    queue.add_resource(liveness.destination, liveness);
+    queue.add_resource(liveness.resource_target, liveness);
 
     // worker threads that will process the request; off the queue
     {
