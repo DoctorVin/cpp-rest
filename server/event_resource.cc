@@ -12,7 +12,7 @@ namespace rest
     using util::EventPersister;
     using util::PersistFailed;
     
-    const std::string AsyncEventProcessor::resource_target{"/events"};
+    const std::string AsyncEventProcessor::resource_target{"events"};
     
     // Public API
     AsyncEventProcessor::AsyncEventProcessor(EventPersister::Ptr ptr) : persister{ptr}
@@ -53,10 +53,10 @@ namespace rest
         std::vector<async_server::response_header> headers{std_headers};
         auto status = async_server::connection::not_found;
         std::string payload{"{ error: \"Event not found.\""};
-        if (ctx.sub_resource.size())
+        if (2 == ctx.path_segments.size())
         {
             // the request is for a single event, ignore any query
-            std::string event = persister->read_single_event(ctx.sub_resource);
+            std::string event = persister->read_single_event(ctx.path_segments[1]);
             if (event.size())
             {
                 status = async_server::connection::ok;

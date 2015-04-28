@@ -36,14 +36,6 @@ namespace rest
         return something_to_do;
     }
     
-    std::string
-    WorkQueue::parse_destination(const std::string& dest)
-    {
-        // strip any subresource-, query-, or anchor tags after the first slash
-        std::string parsed{dest.substr(0, dest.find_first_of("/?#", 1))};
-        return parsed;
-    }
-    
     void
     WorkQueue::operator()(const async_server::request& req, async_server::connection_ptr conn)
     {
@@ -51,16 +43,12 @@ namespace rest
         std::string payload{"{ error : \"Not found.\" }"};
         std::vector<async_server::response_header> headers{std_headers};
         
-        std::string resource{parse_destination(req.destination)};
-        
-        std::cout << "Path: " << req.destination << std::endl;
-        
-        std::cout << "Resource: " << resource << std::endl;
+        RequestContext ctx(req.destination);
         
         bool sendError{true};
         {
             boost::lock_guard<boost::mutex> lock(mapMtx);
-            auto mapIterator = resources.find(resource);
+            auto mapIterator = resources.find(ctx.path_segments[0]);
             if (resources.end() != mapIterator)
             {
                 resFunc = mapIterator->second;
@@ -69,7 +57,6 @@ namespace rest
         }
         if (! sendError)
         {
-            RequestContext ctx(req.destination);
             boost::lock_guard<boost::mutex> lock(listMtx);
             workList.push_back(std::bind(resFunc, std::cref(req), conn, ctx));
         }

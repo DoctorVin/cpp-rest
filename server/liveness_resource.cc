@@ -8,7 +8,7 @@
 
 namespace rest
 {
-    const std::string AsyncLivenessResource::resource_target("/liveness");
+    const std::string AsyncLivenessResource::resource_target("liveness");
     const std::string AsyncLivenessResource::liveness_format("{ proof_of_life : %1% }");
     
     void 

@@ -20,7 +20,6 @@ namespace rest
             {"Connection", "close"},
             {"Content-Type", "application/json"}
         };
-        std::string parse_destination(const std::string&);
     public:
         void add_resource(const std::string&, const resource_function&);
         void operator()(const async_server::request&, async_server::connection_ptr);

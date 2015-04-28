@@ -34,9 +34,9 @@ elseif (${CMAKE_CXX_COMPILER_ID} MATCHES Clang)
 endif()
 
 include_directories( /opt/local/include )
+include(Testing.cmake)
 
 enable_testing()
 
 add_subdirectory(server)
-
 #don't forget to run cmake from the build directory! It's easier that way.
