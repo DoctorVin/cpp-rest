@@ -19,5 +19,6 @@ namespace rest
         std::unordered_map<string_type, string_type> query_args;
     private:
         void process_query(const string_type& query);
+        void process_path(const string_type& path);
     };
 }
