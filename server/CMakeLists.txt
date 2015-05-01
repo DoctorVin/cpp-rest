@@ -5,7 +5,6 @@ set(sync_source_files
     rest-server.cc)
 
 set(async_source_files
-    event_persister.cc
     request_context.cc
     memory_events.cc
     event_resource.cc

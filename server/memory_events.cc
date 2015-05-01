@@ -39,7 +39,6 @@ namespace rest
         MemoryEvents::update_event(const std::string& idstr, const std::string& update)
         {
             uuid id;
-            std::string event{};
             try
             {
                 id = id_from_string(idstr);
@@ -47,7 +46,7 @@ namespace rest
                 auto item = events.find(id);
                 if (item != events.end())
                 {
-                    event = item->second;
+                    events[id] = update;
                 }
             }
             catch (std::runtime_error& ex)
@@ -82,20 +81,23 @@ namespace rest
         }
         
         void
-        MemoryEvents::read_event_ids(EventList& list, uint32_t start_offset, 
-                                     uint32_t limit, const std::string& filter)
+        MemoryEvents::read_event_ids(EventList& list, uint32_t start_offset, uint32_t limit)
         {
             list.clear();
             std::lock_guard<std::mutex> lock(event_mutex);
             auto container_ptr = events.begin();
             auto container_end = events.end();
-            while( container_ptr != container_end && 0 < start_offset--)
+            while( container_ptr != container_end && 0 < start_offset)
             {
-                container_ptr++;
+                ++container_ptr;
+                --start_offset;
             }
-            while (container_ptr != container_end && 0 < limit--)
+            while (container_ptr != container_end && 0 < limit)
             {
-                list.push_back(boost::uuids::to_string(container_ptr->first));
+                // TODO support filtering here
+                list.insert(boost::uuids::to_string(container_ptr->first));
+                ++container_ptr;
+                --limit;
             }
             return;
         }

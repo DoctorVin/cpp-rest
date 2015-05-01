@@ -72,12 +72,10 @@ namespace rest
             EventPersister::EventList list;
             
             uint32_t page_size{20};
-            std::string event_id_filter{};
             uint32_t start_offset{0};
             // find any interesting query parameters
             auto query_end = ctx.query_args.end();
             auto query_page_size = ctx.query_args.find("page_size");
-            auto query_event_filter = ctx.query_args.find("event_filter");
             auto query_start_offset = ctx.query_args.find("start_offset");
             if (query_end != query_page_size)
             {
@@ -90,10 +88,7 @@ namespace rest
                     // just eat the exception and use the default
                 }
             }
-            if (query_end != query_event_filter)
-            {
-                event_id_filter = query_event_filter->second;
-            }
+
             if (query_end != query_start_offset)
             {
                 try
@@ -106,7 +101,7 @@ namespace rest
                 }
             }
             
-            persister->read_event_ids(list, start_offset, page_size, event_id_filter);
+            persister->read_event_ids(list, start_offset, page_size);
             if (list.size())
             {
                 status = async_server::connection::ok;

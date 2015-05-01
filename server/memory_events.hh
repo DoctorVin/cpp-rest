@@ -32,7 +32,7 @@ namespace rest
             std::string create_event(const std::string& evt) override;
             void update_event(const std::string& id, const std::string& evt) override;
             std::string read_single_event(const std::string& id) override;
-            void read_event_ids(EventList&, uint32_t start_offset=0, uint32_t limit=25, const std::string& filter="") override;
+            void read_event_ids(EventList&, uint32_t start_offset=0, uint32_t limit=25) override;
             void delete_event(const std::string& id) override;
         };
     }
