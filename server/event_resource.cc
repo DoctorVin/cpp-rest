@@ -52,7 +52,7 @@ namespace rest
     {
         std::vector<async_server::response_header> headers{std_headers};
         auto status = async_server::connection::not_found;
-        std::string payload{"{ error: \"Event not found.\""};
+        std::string payload{"{ error: \"Event not found.\" }"};
         if (2 == ctx.path_segments.size())
         {
             // the request is for a single event, ignore any query

@@ -18,6 +18,8 @@
 
 #include "rest_processor.hh"
 #include "liveness_resource.hh"
+#include "event_resource.hh"
+#include "memory_events.hh"
 
 #define Log(line)                   \
   do {                              \
@@ -81,7 +83,10 @@ int main(void) try
   
     rest::WorkQueue queue;
     rest::AsyncLivenessResource liveness;
+    rest::util::EventPersister::Ptr p_evtPersister = rest::util::MemoryEvents::getPersister();
+    rest::AsyncEventProcessor events(p_evtPersister);
     queue.add_resource(liveness.resource_target, liveness);
+    queue.add_resource(events.resource_target, events);
 
     // worker threads that will process the request; off the queue
     {
